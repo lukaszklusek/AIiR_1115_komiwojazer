@@ -2,14 +2,15 @@ __author__ = 'Wiktor'
 
 from random import shuffle
 
-
 class Tour(object):
     distance = 0
 
     def __init__(self,tourManager):
-            self.tourManager = tourManager
-            self.tour = []
-            self.random = shuffle
+        self.tourManager = tourManager
+        self.tour = []
+        self.random = shuffle
+        for i in range(0,self.tourManager.numberOfCities()):
+            self.tour.append(None)
 
     def getTour(self):
         return self.tour
@@ -18,7 +19,7 @@ class Tour(object):
         return self.tour[tourPosition]
 
     def setCity(self,tourPosition,city):
-        self.tour.insert(tourPosition,city)
+        self.tour[tourPosition] = city
         self.distance = 0
 
     def generateIndividual(self):
@@ -50,8 +51,6 @@ class Tour(object):
         for i in range (0,self.tourSize()):
             geneString += str(self.getCity(i))+"|"
         return  geneString
-
-
 
 
 
