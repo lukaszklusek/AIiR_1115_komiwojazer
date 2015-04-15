@@ -56,8 +56,8 @@ class SimulatedAnnealing(object):
         tourManager.addCity(city20);
 
         temp = 1000
-
-        coolingRate = 0.003
+        print(len(tourManager.destinationCities))
+        coolingRate = 0.005
 
         currentSolution = Tour(tourManager)
         currentSolution.generateIndividual()
