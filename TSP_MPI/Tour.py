@@ -1,6 +1,8 @@
 __author__ = 'Wiktor'
 
 from random import shuffle
+from TSP_MPI.City import City
+from TSP_MPI.TourManager import TourManager
 
 class Tour(object):
     distance = 0
@@ -32,6 +34,10 @@ class Tour(object):
     def tourSize(self):
         return len(self.tour)
 
+
+    def getIndividualDistance(self,index1,index2):
+        return City(self.tour[index1]).distanceTo(self.tour[index2])
+
     def getDistance(self):
         # if self.distance == 0:
         tourDistance = 0
@@ -44,6 +50,7 @@ class Tour(object):
             tourDistance += fromCity.distanceTo(destinationCity)
         distance = tourDistance
         return distance
+
 
 
     def __str__(self):
