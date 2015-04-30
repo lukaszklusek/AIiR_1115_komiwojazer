@@ -1,11 +1,11 @@
 
 $( function() {
-  var bar = $('#tryProgressBar');
+  var bar = $('#ProgressBar1-1');
   var val = null;
 
   i1 = setInterval(function() {
     val = parseInt(bar.attr('aria-valuenow'));
-    val += 1;
+    val += 10;
     console.log(val);
     if( val <= 100) {
       bar.attr('aria-valuenow', val);
