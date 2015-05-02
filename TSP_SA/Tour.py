@@ -27,13 +27,14 @@ class Tour(object):
             self.setCity(cityIndex,self.tourManager.getCity(cityIndex))
         self.random(self.tour)
 
-
+    def cpTour(self,tourManager):
+        for i in range(0,self.tourManager.numberOfCities()):
+            self.tourManager.setDestinationCity(i,tourManager.getDestinationCity(i))
 
     def tourSize(self):
         return len(self.tour)
 
     def getDistance(self):
-        # if self.distance == 0:
         tourDistance = 0
         for cityIndex in range(0,self.tourSize()):
             fromCity = self.getCity(cityIndex)

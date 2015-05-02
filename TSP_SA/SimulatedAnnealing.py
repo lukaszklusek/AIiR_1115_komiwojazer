@@ -29,6 +29,8 @@ class SimulatedAnnealing(object):
 
     def algorithm(self):
         tourManager = TourManager()
+        tourManager2 = TourManager()
+        tourManager3 = TourManager()
         city = City(60, 200)
         tourManager.addCity(city);
         city2 = City(180, 200);
@@ -71,8 +73,7 @@ class SimulatedAnnealing(object):
         tourManager.addCity(city20);
 
         temp = 1000
-        print(len(tourManager.destinationCities))
-        coolingRate = 0.005
+        coolingRate = 0.002
 
         currentSolution = Tour(tourManager)
         currentSolution.generateIndividual()
@@ -80,12 +81,15 @@ class SimulatedAnnealing(object):
         print(currentSolution)
         print("Initial solution distance: " + str(currentSolution.getDistance()))
 
+        best = Tour(tourManager)
+        best.generateIndividual()
+        best.cpTour(currentSolution.tourManager)
 
-        best = currentSolution
-
+        newSolution = Tour(tourManager)
+        newSolution.generateIndividual()
         while (temp > 1):
-            newSolution = currentSolution
 
+            newSolution.cpTour(currentSolution.tourManager)
             tourPos1 = random.randint(0,newSolution.tourSize()-1)
             tourPos2 = random.randint(0,newSolution.tourSize()-1)
 
@@ -99,11 +103,11 @@ class SimulatedAnnealing(object):
             neighbourEnergy = newSolution.getDistance()
 
             if (self.acceptanceProbability(currentEnergy,neighbourEnergy,temp) > random.random()):
-                currentSolution = newSolution
+                currentSolution.cpTour(newSolution.tourManager)
             if (currentSolution.getDistance() < best.getDistance()):
-                best = currentSolution
+                best.cpTour(currentSolution.tourManager)
 
-
+            #temp -= 100
             temp *= 1-coolingRate
 
         print("Final solution distance: " + str(best.getDistance()))
