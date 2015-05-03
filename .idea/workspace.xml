@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
+<<<<<<< HEAD
+    <list default="true" id="e0339b2a-2e64-4e56-b9c0-251b357fa8f4" name="Default" comment="Tak jak rozkazano, wybrany przykład komiwojażera w pythonie&#10;">
+=======
     <list default="true" id="e0339b2a-2e64-4e56-b9c0-251b357fa8f4" name="Default" comment="Logowanie pre-alpha. Jeszcze do końca nie działa ze względu na jedną linijkę, ale wrzucam jakby ktoś chciał rozkminić. Frontend przeniesiony do folderu serwera, wszelkie modyfikacje robić właśnie tam.&#10;">
       <change type="DELETED" beforePath="C:\Users\user\Documents\Studia\AIiR Projekt\AIiR_1115_komiwojazer\Server\app.db" afterPath="" />
       <change type="DELETED" beforePath="C:\Users\user\Documents\Studia\AIiR Projekt\AIiR_1115_komiwojazer\Server\db_repository\versions\001_migration.py" afterPath="" />
@@ -9,6 +12,7 @@
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Server/app/templates/index.html" afterPath="$PROJECT_DIR$/Server/app/templates/index.html" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Server/app/models.py" afterPath="$PROJECT_DIR$/Server/app/models.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Server/app/views.py" afterPath="$PROJECT_DIR$/Server/app/views.py" />
+>>>>>>> origin/master
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="AIiR_1115_komiwojazer.iws" />
@@ -45,6 +49,11 @@
       <file leaf-file-name="views.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/Server/app/views.py">
           <provider selected="true" editor-type-id="text-editor">
+<<<<<<< HEAD
+            <state vertical-scroll-proportion="0.59099436" vertical-offset="1555" max-vertical-offset="3604">
+              <caret line="110" column="34" selection-start-line="110" selection-start-column="34" selection-end-line="110" selection-end-column="34" />
+              <folding />
+=======
             <state vertical-scroll-proportion="1.86911" vertical-offset="561" max-vertical-offset="1768">
               <caret line="75" column="64" selection-start-line="75" selection-start-column="64" selection-end-line="75" selection-end-column="64" />
               <folding>
@@ -62,6 +71,7 @@
               <folding>
                 <element signature="e#0#23#0" expanded="true" />
               </folding>
+>>>>>>> origin/master
             </state>
           </provider>
         </entry>
@@ -69,8 +79,13 @@
       <file leaf-file-name="index.html" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Server/app/templates/index.html">
           <provider selected="true" editor-type-id="text-editor">
+<<<<<<< HEAD
+            <state vertical-scroll-proportion="0.0" vertical-offset="2922" max-vertical-offset="5151">
+              <caret line="179" column="20" selection-start-line="179" selection-start-column="20" selection-end-line="179" selection-end-column="20" />
+=======
             <state vertical-scroll-proportion="-24.0" vertical-offset="634" max-vertical-offset="3570">
               <caret line="101" column="139" selection-start-line="101" selection-start-column="139" selection-end-line="101" selection-end-column="139" />
+>>>>>>> origin/master
               <folding>
                 <element signature="n#head#0;n#html#0;n#!!top" expanded="false" />
               </folding>
@@ -81,8 +96,13 @@
       <file leaf-file-name="app.py" pinned="false" current-in-tab="false">
         <entry file="file://D:/Python/Lib/site-packages/flask/app.py">
           <provider selected="true" editor-type-id="text-editor">
+<<<<<<< HEAD
+            <state vertical-scroll-proportion="0.0" vertical-offset="119" max-vertical-offset="1139">
+              <caret line="7" column="12" selection-start-line="7" selection-start-column="12" selection-end-line="7" selection-end-column="12" />
+=======
             <state vertical-scroll-proportion="0.0" vertical-offset="30590" max-vertical-offset="30991">
               <caret line="1835" column="0" selection-start-line="1835" selection-start-column="0" selection-end-line="1835" selection-end-column="0" />
+>>>>>>> origin/master
               <folding />
             </state>
           </provider>
@@ -91,8 +111,13 @@
       <file leaf-file-name="__init__.py" pinned="false" current-in-tab="false">
         <entry file="file://D:/Python/Lib/site-packages/werkzeug/debug/__init__.py">
           <provider selected="true" editor-type-id="text-editor">
+<<<<<<< HEAD
+            <state vertical-scroll-proportion="0.0" vertical-offset="533" max-vertical-offset="3519">
+              <caret line="40" column="0" selection-start-line="40" selection-start-column="0" selection-end-line="40" selection-end-column="0" />
+=======
             <state vertical-scroll-proportion="0.0" vertical-offset="1278" max-vertical-offset="3145">
               <caret line="89" column="0" selection-start-line="89" selection-start-column="0" selection-end-line="89" selection-end-column="0" />
+>>>>>>> origin/master
               <folding />
             </state>
           </provider>
@@ -101,9 +126,17 @@
       <file leaf-file-name="serving.py" pinned="false" current-in-tab="false">
         <entry file="file://D:/Python/Lib/site-packages/werkzeug/serving.py">
           <provider selected="true" editor-type-id="text-editor">
+<<<<<<< HEAD
+            <state vertical-scroll-proportion="0.0" vertical-offset="119" max-vertical-offset="306">
+              <caret line="9" column="0" selection-start-line="9" selection-start-column="0" selection-end-line="9" selection-end-column="0" />
+              <folding>
+                <element signature="e#0#43#0" expanded="false" />
+              </folding>
+=======
             <state vertical-scroll-proportion="0.0" vertical-offset="3199" max-vertical-offset="11441">
               <caret line="202" column="0" selection-start-line="202" selection-start-column="0" selection-end-line="202" selection-end-column="0" />
               <folding />
+>>>>>>> origin/master
             </state>
           </provider>
         </entry>
@@ -220,7 +253,6 @@
       <sortByType />
     </navigator>
     <panes>
-      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -309,6 +341,7 @@
           </PATH>
         </subPane>
       </pane>
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -836,10 +869,18 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
+<<<<<<< HEAD
+    <frame x="-8" y="-8" width="1696" height="1026" extended-state="6" />
+    <editor active="false" />
+    <layout>
+      <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.32885906" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.15403423" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+=======
     <frame x="-8" y="-8" width="1382" height="744" extended-state="6" />
     <editor active="true" />
     <layout>
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.30974844" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+>>>>>>> origin/master
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32997763" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3267974" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
@@ -1242,25 +1283,40 @@
     </entry>
     <entry file="file://D:/Python/Lib/site-packages/flask/app.py">
       <provider selected="true" editor-type-id="text-editor">
+<<<<<<< HEAD
+        <state vertical-scroll-proportion="1.6433567" vertical-offset="692" max-vertical-offset="1819">
+          <caret line="100" column="0" selection-start-line="100" selection-start-column="0" selection-end-line="100" selection-end-column="0" />
+=======
         <state vertical-scroll-proportion="0.0" vertical-offset="30562" max-vertical-offset="30991">
           <caret line="1835" column="0" selection-start-line="1835" selection-start-column="0" selection-end-line="1835" selection-end-column="0" />
           <folding />
+>>>>>>> origin/master
         </state>
       </provider>
     </entry>
     <entry file="file://D:/Python/Lib/site-packages/werkzeug/debug/__init__.py">
       <provider selected="true" editor-type-id="text-editor">
+<<<<<<< HEAD
+        <state vertical-scroll-proportion="0.0" vertical-offset="561" max-vertical-offset="1156">
+          <caret line="33" column="0" selection-start-line="33" selection-start-column="0" selection-end-line="33" selection-end-column="0" />
+=======
         <state vertical-scroll-proportion="0.0" vertical-offset="1278" max-vertical-offset="3145">
           <caret line="89" column="0" selection-start-line="89" selection-start-column="0" selection-end-line="89" selection-end-column="0" />
           <folding />
+>>>>>>> origin/master
         </state>
       </provider>
     </entry>
     <entry file="file://D:/Python/Lib/site-packages/werkzeug/serving.py">
       <provider selected="true" editor-type-id="text-editor">
+<<<<<<< HEAD
+        <state vertical-scroll-proportion="0.5244755" vertical-offset="40" max-vertical-offset="612">
+          <caret line="20" column="0" selection-start-line="20" selection-start-column="0" selection-end-line="20" selection-end-column="0" />
+=======
         <state vertical-scroll-proportion="0.0" vertical-offset="3199" max-vertical-offset="11441">
           <caret line="202" column="0" selection-start-line="202" selection-start-column="0" selection-end-line="202" selection-end-column="0" />
           <folding />
+>>>>>>> origin/master
         </state>
       </provider>
     </entry>
@@ -1292,21 +1348,42 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/Server/app/models.py">
       <provider selected="true" editor-type-id="text-editor">
+<<<<<<< HEAD
+        <state vertical-scroll-proportion="0.0" vertical-offset="533" max-vertical-offset="3519">
+          <caret line="40" column="0" selection-start-line="40" selection-start-column="0" selection-end-line="40" selection-end-column="0" />
+=======
         <state vertical-scroll-proportion="0.0" vertical-offset="102" max-vertical-offset="680">
           <caret line="5" column="38" selection-start-line="5" selection-start-column="38" selection-end-line="5" selection-end-column="38" />
+>>>>>>> origin/master
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/Server/app/views.py">
       <provider selected="true" editor-type-id="text-editor">
+<<<<<<< HEAD
+        <state vertical-scroll-proportion="0.0" vertical-offset="2922" max-vertical-offset="5151">
+          <caret line="179" column="20" selection-start-line="179" selection-start-column="20" selection-end-line="179" selection-end-column="20" />
+=======
         <state vertical-scroll-proportion="1.86911" vertical-offset="561" max-vertical-offset="1768">
           <caret line="75" column="64" selection-start-line="75" selection-start-column="64" selection-end-line="75" selection-end-column="64" />
+>>>>>>> origin/master
           <folding>
             <element signature="e#0#80#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
+<<<<<<< HEAD
+    <entry file="file://$PROJECT_DIR$/FRONTEND/index.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.59099436" vertical-offset="1555" max-vertical-offset="3604">
+          <caret line="110" column="34" selection-start-line="110" selection-start-column="34" selection-end-line="110" selection-end-column="34" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+=======
+>>>>>>> origin/master
   </component>
 </project>
