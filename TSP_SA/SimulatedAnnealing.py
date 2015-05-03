@@ -110,29 +110,33 @@ class SimulatedAnnealing(object):
             #temp -= 100
             temp *= 1-coolingRate
 
-        print("Final solution distance: " + str(best.getDistance()))
-        print(best)
+        #print("Final solution distance: " + str(best.getDistance()))
+        #print(best)
 
+        return best.getDistance()
 
+sb = numpy.zeros(1)
 sa = SimulatedAnnealing()
 
-sb=sa.algorithm()
+sb[0]=sa.algorithm()
+
+print sb, "Najlepszy wedlug ", rank
 
 recv_buffer = numpy.zeros(1)
 
 if rank == 0:
-        so_best = 999999
+        so_best = sb[0]
         for i in range(1, size):
                 comm.Recv(recv_buffer, ANY_SOURCE)
-                if (so_best<recv_buffer):
+                if (so_best>recv_buffer):
                     so_best = recv_buffer[0]
-                print ("Final solution distance the best: ", so_best)
+               # print ("Final solution distance the best: ", so_best)
 else:
         # all other process send their result
         comm.Send(sb)
 
 if comm.rank == 0:
-    print ("Final solution distance the best: ", so_best)
+    print "Final solution distance the best: ", so_best
 
 
 
