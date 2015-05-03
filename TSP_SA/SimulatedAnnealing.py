@@ -1,9 +1,24 @@
-__author__ = 'Wiktor'
+#!/usr/bin/env python
+__author__ = 'Wiktor&LukaszK'
+import sys
+import os.path
+
+sys.path.append(os.path.join(os.path.dirname(__file__),'..'))
 from TSP_SA.City import City
 from TSP_SA.TourManager import TourManager
 from TSP_SA.Tour import Tour
 import math
 import random
+import numpy
+
+from mpi4py import MPI
+from mpi4py.MPI import ANY_SOURCE
+
+
+comm = MPI.COMM_WORLD
+rank = comm.Get_rank()
+size = comm.Get_size()
+
 class SimulatedAnnealing(object):
 
 
@@ -98,8 +113,26 @@ class SimulatedAnnealing(object):
         print("Final solution distance: " + str(best.getDistance()))
         print(best)
 
+
 sa = SimulatedAnnealing()
 
-sa.algorithm()
+sb=sa.algorithm()
+
+recv_buffer = numpy.zeros(1)
+
+if rank == 0:
+        so_best = 999999
+        for i in range(1, size):
+                comm.Recv(recv_buffer, ANY_SOURCE)
+                if (so_best<recv_buffer):
+                    so_best = recv_buffer[0]
+                print ("Final solution distance the best: ", so_best)
+else:
+        # all other process send their result
+        comm.Send(sb)
+
+if comm.rank == 0:
+    print ("Final solution distance the best: ", so_best)
+
 
 
