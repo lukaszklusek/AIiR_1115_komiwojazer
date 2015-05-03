@@ -29,7 +29,7 @@ def load_user(id):
 def login():
 
     input_email = request.form.get('inputEmail', None)
-    input_password = generate_password_hash(request.form.get('inputPassword', None))
+    input_password = request.form.get('inputPassword', None)
     input_remember_me = request.form.get('remember-me', False)
 
     if g.user is not None and g.user.is_authenticated():
@@ -37,7 +37,8 @@ def login():
 
     user = User.query.filter_by(email=input_email).first()
 
-    if user is None or check_password_hash(user.password, input_password):
+
+    if (user is None) or not check_password_hash(user.password, input_password):
         flash('Niewłaściwy login lub hasło', 'login-error')
         return redirect(url_for('index'))
 
@@ -49,6 +50,7 @@ def login():
 @app.route('/logout')
 def logout():
     logout_user()
+    flash('Wylogowano', 'logout-msg')
     return redirect(url_for('index'))
 
 @app.route('/register', methods=['POST'])

@@ -1,3 +1,10 @@
+'''
+Po każdej zmianie w strukturze bazy trzeba albo utworzyć ją od nowa (db_create.py)
+albo zmigrować starą (zachowując dane);
+    db_migrate.py - utworzenie nowej wersji bazy
+    db_upgrade(downgrade.py) - upgrade(downgrade) obecnej bazy do nowej(poprzedniej) wersji utworzonej przez db_migrate.py
+                                (wszystkie wersje są składowane w db_repository)
+'''
 from app import db
 
 class User(db.Model):
