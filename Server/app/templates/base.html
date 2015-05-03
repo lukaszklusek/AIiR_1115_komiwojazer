@@ -99,11 +99,11 @@
                 <input type="email" id="inputEmail2" name="inputEmail" class="form-control" placeholder="Adres email" required autofocus>
                 <label for="inputPassword" class="sr-only">Haslo</label>
                 <input type="password" id="inputPassword1" name="inputPassword1" class="form-control" placeholder="Hasło" required>
-                <input type="password" id="inputPassword2" name="inputPassword2" class="form-control" placeholder="Powtórz hasło" required><button class="btn btn-lg btn-primary btn-block" type="submit">Zarejestruj</button>
+                <input type="password" id="inputPassword2" name="inputPassword2" class="form-control" placeholder="Powtórz hasło" required>
             </form>
           </div>
             <div class="modal-footer">
-                <button class="btn btn-lg btn-primary btn-block" type="submit">Zarejestruj</button>
+                <button class="btn btn-lg btn-danger btn-block" type="submit">Zarejestruj</button>
             </div>
         <!--END MODAL CONTENT-->
         </div>
@@ -133,7 +133,11 @@
                         <a href="/">O Projekcie</a>
                     </li>
                     <li>
-                        <a href="/tsp">Wypróbuj</a>
+                        {% if g.user.is_authenticated() %}
+                            <a href="{{ url_for('tsp') }}">Wypróbuj</a>
+                        {% else %}
+                            <a data-toggle="modal" href="#loginModal">Wypróbuj</a>
+                        {% endif %}
                     </li>
                     <li>
                         {% if g.user.is_authenticated() %}

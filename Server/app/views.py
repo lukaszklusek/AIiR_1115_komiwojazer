@@ -44,7 +44,7 @@ def login():
     login_user(user, remember=bool(input_remember_me))
 
     flash('Zalogowano', 'login-msg')
-    return redirect(url_for('index'))
+    return redirect(url_for('tsp'))
 
 @app.route('/logout')
 def logout():
