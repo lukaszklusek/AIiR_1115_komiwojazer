@@ -11,12 +11,15 @@ def before_request():
 @app.route('/')
 @app.route('/index')
 def index():
-    return render_template('index.html')
+    return render_template('index.html',
+                           title='Strona główna')
+
 
 @app.route('/tsp')
 @login_required
 def tsp():
-    return render_template('tsp.html')
+    return render_template('tsp.html',
+                           title='Algorytm TSP')
 
 @lm.user_loader
 def load_user(id):
