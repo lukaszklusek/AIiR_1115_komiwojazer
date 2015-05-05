@@ -1,5 +1,5 @@
 __author__ = 'Wiktor'
-from TSP_MPI.City import City
+import TSP_MPI.City
 
 class TourManager(object):
     destinationCities = []
