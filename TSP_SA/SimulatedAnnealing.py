@@ -2,22 +2,32 @@
 __author__ = 'Wiktor&LukaszK'
 import sys
 import os.path
+import sqlite3
 
 sys.path.append(os.path.join(os.path.dirname(__file__),'..'))
 from TSP_SA.City import City
 from TSP_SA.TourManager import TourManager
 from TSP_SA.Tour import Tour
+
 import math
 import random
 import numpy
 
+#from ..Server.app.models import Task
+#from flask import requests
+
 from mpi4py import MPI
 from mpi4py.MPI import ANY_SOURCE
 
+path = '/home/lukas/Documents/PycharmProjects/AIiR_1115_komiwojazer/AIiR_1115_komiwojazer/Server/app.db'
+connect = sqlite3.connect(path)
+connect.isolation_level = None
 
 comm = MPI.COMM_WORLD
 rank = comm.Get_rank()
 size = comm.Get_size()
+c = connect.cursor()
+
 
 class SimulatedAnnealing(object):
 
@@ -31,55 +41,16 @@ class SimulatedAnnealing(object):
         tourManager = TourManager()
         tourManager2 = TourManager()
         tourManager3 = TourManager()
+
         f = open('test.txt','r')
         for line in f:
             a=line.split()
-            ab = a[0]
-            abc = a[1]
+            ab = int(a[0])
+            abc = int(a[1])
             city = City(ab, abc)
             tourManager.addCity(city);
-            print ab, abc
+
         f.close()
-        #city = City(60, 200)
-        #tourManager.addCity(city);
-        #city2 = City(180, 200);
-        #tourManager.addCity(city2);
-        #city3 = City(80, 180);
-        #tourManager.addCity(city3);
-        #city4 = City(140, 180);
-        #tourManager.addCity(city4);
-        #city5 = City(20, 160);
-        #tourManager.addCity(city5);
-        #city6 = City(100, 160);
-        #tourManager.addCity(city6);
-        #city7 = City(200, 160);
-        #tourManager.addCity(city7);
-        #city8 = City(140, 140);
-        #tourManager.addCity(city8);
-        #city9 = City(40, 120);
-        #tourManager.addCity(city9);
-        #city10 =  City(100, 120);
-        #tourManager.addCity(city10);
-        #city11 = City(180, 100);
-        #tourManager.addCity(city11);
-        #city12 = City(60, 80);
-        #tourManager.addCity(city12);
-        #city13 =  City(120, 80);
-        #tourManager.addCity(city13);
-        #city14 =  City(180, 60);
-        #tourManager.addCity(city14);
-        #city15 =  City(20, 40);
-        #tourManager.addCity(city15);
-        #city16 =  City(100, 40);
-        #tourManager.addCity(city16);
-        ##city17 = City(200, 40);
-        #tourManager.addCity(city17);
-        #city18 =  City(20, 20);
-        #tourManager.addCity(city18);
-        #city19 =  City(60, 20);
-        #tourManager.addCity(city19);
-        #city20 = City(160, 20);
-        #tourManager.addCity(city20);
 
         temp = 1000
         coolingRate = 0.002
@@ -88,7 +59,9 @@ class SimulatedAnnealing(object):
         currentSolution.generateIndividual()
 
         print(currentSolution)
+        start=currentSolution
         print("Initial solution distance: " + str(currentSolution.getDistance()))
+        poczatek = str(currentSolution.getDistance())
 
         best = Tour(tourManager)
         best.generateIndividual()
@@ -117,10 +90,10 @@ class SimulatedAnnealing(object):
                 best.cpTour(currentSolution.tourManager)
 
             #temp -= 100
+            koniec = best.getDistance()
             temp *= 1-coolingRate
 
-        #print("Final solution distance: " + str(best.getDistance()))
-        #print(best)
+        connect.execute('INSERT INTO task (input, output, time_started, user_id) VALUES (?, ?, current_timestamp, 1)',(poczatek, koniec))
 
         return best.getDistance()
 
@@ -146,6 +119,9 @@ else:
 
 if comm.rank == 0:
     print "Final solution distance the best: ", so_best
+
+
+connect.close()
 
 
 
