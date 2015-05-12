@@ -11,10 +11,12 @@ class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     email = db.Column(db.String(120), index=True, unique=True)
     password = db.Column(db.String(120))
+    active = db.Column(db.Boolean)
 
     def __init__(self, email, password):
         self.email = email
         self.password = password
+        self.active = True
 
     def is_authenticated(self):
         return True
