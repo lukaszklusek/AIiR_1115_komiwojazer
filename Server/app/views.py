@@ -21,7 +21,8 @@ def index():
 @login_required
 def tsp():
     return render_template('tsp.html',
-                           title='Algorytm TSP')
+                           title='Algorytm TSP',
+                           tryTasks=4)
 
 @app.route('/tsp/add_task', methods=['POST'])
 @login_required
