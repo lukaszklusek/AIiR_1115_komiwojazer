@@ -3,6 +3,8 @@ from flask.ext.login import login_user, logout_user, current_user, login_require
 from app import app, db, lm
 from .models import User, Task
 from werkzeug.security import generate_password_hash, check_password_hash
+from werkzeug.utils import secure_filename
+import os
 
 @app.before_request
 def before_request():
@@ -20,6 +22,28 @@ def index():
 def tsp():
     return render_template('tsp.html',
                            title='Algorytm TSP')
+
+@app.route('/tsp/add_task', methods=['POST'])
+@login_required
+def add_task():
+    if request.method == 'POST':
+        file = request.files['fileToUpload']
+        if not file:
+            flash("Błąd wysyłania pliku", 'upload-error')
+            return redirect(url_for('tsp'))
+
+        filename = secure_filename(file.filename)
+        filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+        file.save(filepath)
+
+        task = Task()
+        task.init_from_file(filepath, g.user)
+        db.session.add(task)
+        db.session.commit()
+
+        flash("Dodano zadanie", 'add_task-msg')
+
+    return redirect(url_for('tsp'))
 
 @lm.user_loader
 def load_user(id):

@@ -7,4 +7,7 @@ SQLALCHEMY_MIGRATE_REPO = os.path.join(basedir, 'db_repository')
 WTF_CSRF_ENABLED = True
 SECRET_KEY = 'devkey'
 
+UPLOAD_FOLDER = os.path.join(basedir, 'uploads')
+
+
 

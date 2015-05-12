@@ -6,6 +6,7 @@ albo zmigrować starą (zachowując dane);
                                 (wszystkie wersje są składowane w db_repository)
 '''
 from app import db
+import datetime
 
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -37,7 +38,14 @@ class Task(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     input = db.Column(db.String(1024))
     output = db.Column(db.String(1024))
-    time_started = db.Column(db.DateTime)
+    time_started = db.Column(db.DateTime, default=datetime.datetime.now)
+    time_finished = db.Column(db.DateTime)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+
+    def init_from_file(self, filepath, user):
+        file = open(filepath, 'r')
+        self.input = file.read()
+        self.user_id = user.id
+        return self
 
 
