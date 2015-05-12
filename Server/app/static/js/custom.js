@@ -10,7 +10,11 @@ $(document).ready(function(){
     $point.click(function(){
        $(this).next(".algorithm").slideToggle( "slow", function() {
     // Animation complete.
-  });
+                                                                });
     });
+    $("#next").onclick(function(){
+        $(body).html("{% set tryTasks = 2 %}");
+    });
+
 });
 

@@ -19,7 +19,8 @@ def index():
 @login_required
 def tsp():
     return render_template('tsp.html',
-                           title='Algorytm TSP')
+                           title='Algorytm TSP',
+                           tryTasks=4)
 
 @lm.user_loader
 def load_user(id):
