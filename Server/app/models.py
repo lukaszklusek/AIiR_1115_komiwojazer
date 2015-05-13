@@ -7,6 +7,7 @@ albo zmigrować starą (zachowując dane);
 '''
 from app import db
 import datetime
+from sqlalchemy import CheckConstraint
 
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -41,6 +42,8 @@ class Task(db.Model):
     time_started = db.Column(db.DateTime, default=datetime.datetime.now)
     time_finished = db.Column(db.DateTime)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    state = db.Column(db.String(10))
+    progress = db.Column(db.Integer, CheckConstraint('progress>=0 & progress<=100') )
 
     def init_from_file(self, filepath, user):
         file = open(filepath, 'r')
