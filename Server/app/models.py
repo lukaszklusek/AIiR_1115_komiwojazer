@@ -39,16 +39,21 @@ class Task(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     input = db.Column(db.String(1024))
     output = db.Column(db.String(1024))
-    time_started = db.Column(db.DateTime, default=datetime.datetime.now)
+    time_started = db.Column(db.DateTime)
     time_finished = db.Column(db.DateTime)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     state = db.Column(db.String(10))
-    progress = db.Column(db.Integer, CheckConstraint('progress>=0 & progress<=100') )
+    progress = db.Column(db.Integer, CheckConstraint('progress>=0 & progress<=100'),default=0)
 
     def init_from_file(self, filepath, user):
+        self.time_started = datetime.datetime.now()
+        self.state = "working"
         file = open(filepath, 'r')
         self.input = file.read()
         self.user_id = user.id
+
+
+    def add_waiting_task(self, user):
+        self.user_id = user.id
+        self.state="waiting"
         return self
-
-
