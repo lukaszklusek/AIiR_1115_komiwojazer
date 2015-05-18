@@ -1,11 +1,13 @@
-from flask import render_template, flash, redirect, session, url_for, request, g
+from flask import render_template, flash, redirect, session, url_for, request, g, jsonify
 from flask.ext.login import login_user, logout_user, current_user, login_required
 from app import app, db, lm
 from .models import User, Task
+
 from werkzeug.security import generate_password_hash, check_password_hash
 from werkzeug.utils import secure_filename
 import os
-
+APP_ROOT = os.path.dirname(os.path.abspath(__file__))
+STATIC = os.path.join(APP_ROOT, 'static')
 @app.before_request
 def before_request():
     g.user = current_user
@@ -21,8 +23,55 @@ def index():
 @login_required
 def tsp():
     return render_template('tsp.html',
-                           title='Algorytm TSP',
-                           tryTasks=4)
+                           title='Algorytm TSP')
+
+@app.route('/_active_task')
+def _active_task():
+    tasks = Task.query.filter_by(user_id = g.user.id)
+    user_tasks = 0
+    for task in tasks:
+            user_tasks += 1
+    return jsonify(result = user_tasks)
+
+@app.route('/_working_task')
+def _working_task():
+    tasks = Task.query.filter_by(user_id = g.user.id)
+    user_tasks = 0
+    for task in tasks:
+        if(task.state == "working"):
+            user_tasks += 1
+    return jsonify(result = user_tasks)
+
+
+@app.route('/_update_progress')
+def _update_progress():
+    tasks = Task.query.filter_by(user_id = g.user.id)
+    message = {}
+    message['value'] = []
+    for task in tasks:
+        message['value'].append(task.progress)
+    return jsonify(message)
+
+
+@app.route('/_add_active_task')
+def _add_active_task():
+    tasks = Task.query.filter_by(user_id = g.user.id)
+    user_tasks = 0
+    test = 0
+    for x in tasks:
+        user_tasks += 1
+        if (x.state == "working" or x.state == "done"):
+            test += 1
+
+    # Sprawdzenie czy dodaje nowe zadanie przez rozpoczeciem/skonczeniem poprzedniego
+    if ((user_tasks - test) == 0):
+        task = Task()
+        task.add_waiting_task(g.user)
+        db.session.add(task)
+        db.session.commit()
+    else: user_tasks = 500
+
+    return jsonify(result = user_tasks)
 
 @app.route('/tsp/add_task', methods=['POST'])
 @login_required
@@ -37,9 +86,17 @@ def add_task():
         filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
         file.save(filepath)
 
-        task = Task()
+        tasks = Task.query.filter_by(user_id = g.user.id)
+
+        task = None
+
+        for t in tasks:
+            if (t.state == "waiting"):
+                task = t;
+
+
         task.init_from_file(filepath, g.user)
-        db.session.add(task)
+        # db.session.add(task)
         db.session.commit()
 
         flash("Dodano zadanie", 'add_task-msg')
