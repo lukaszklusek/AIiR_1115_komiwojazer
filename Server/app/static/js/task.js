@@ -11,8 +11,13 @@ $(document).ready(function() {
     $("#next-1").click(function(){
         addTask();
     });
-
+    $(".pointer").click(function(){
+       $(this).next(".algorithm").slideToggle( "slow");
+    });
     setInterval("updateProgress()", 1000);
+
+
+
 });
 
 
@@ -38,8 +43,9 @@ function addTask(){
                     <div class=\"row col-md-6\">\
                     <h3>Zadanie "+i+"</h3>\
                     <ul>\
-                    <li>Najkrótsza droga : Czekam...</li>\
-                    <li>Zobacz najkrótszą drogę: Czekam...</li>\
+                    <li id=\"path-1-"+ i+"\">Najkrótsza droga : Rozpocznij algorytm.</li>\
+                    <button id=\"show-1-"+ i+"\">Pokaż rozwiazanie</button> \
+                    \<button id=\"show-points-1-"+ i+"\">Pokaż zaadane punkty</button> \
                     </ul>\
                     <h4>Pasek postępu</h4>\
                     <div class=\"progress\">\
@@ -77,8 +83,9 @@ function initTasks(){
         <div class=\"row col-md-6\">\
         <h3>Zadanie "+i+"</h3>\
         <ul>\
-        <li>Najkrótsza droga : Czekam...</li>\
-        <li>Zobacz najkrótszą drogę: Czekam...</li>\
+        <li id=\"path-1-"+ i+"\">Najkrótsza droga : Rozpocznij algorytm.</li>\
+        <button id=\"show-1-"+ i+"\">Pokaż rozwiazanie</button> \
+        <button id=\"show-points-1-"+ i+"\">Pokaż zaadane punkty</button> \
         </ul>\
         <h4>Pasek postępu</h4>\
         <div class=\"progress\">\
@@ -110,10 +117,11 @@ function updateProgress(){
           $.each(data, function() {
               $.each(this, function(index, itemData) {
                   $("#ProgressBar1-"+i+"").css('width',''+itemData+'%').attr('aria-valuenow', itemData);
-
-        //       <div class=\"progress-bar\" id=\"ProgressBar1-" +i+ "\" role=\"progressbar\" aria-valuenow=\"0\"\
-        //aria-valuemin=\"0\" aria-valuemax=\"100\" style=\"width:0%\">\
-        //          alert(i);
+                  if (parseInt(itemData) > 0 && parseInt(itemData) < 100){
+                      $("#path-1-"+i+"").html("Najkrótsza droga : Czekam...");
+                  }else if(parseInt(itemData) > 100){
+                      $("#path-1-"+i+"").html("Najkrótsza droga : Done");
+                  }
                   i++;
               });
         });
@@ -122,16 +130,6 @@ function updateProgress(){
 
 }
 
-$(document).ready(function(){
+function startTask(){
 
-
-
-    $point = $(".pointer");
-        $point.click(function(){
-       $(this).next(".algorithm").slideToggle( "slow", function() {
-    // Animation complete.
-                                                                });
-    });
-
-});
-
+}
