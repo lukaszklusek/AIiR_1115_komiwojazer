@@ -37,23 +37,59 @@ class User(db.Model):
 
 class Task(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    input = db.Column(db.String(1024))
-    output = db.Column(db.String(1024))
     time_started = db.Column(db.DateTime)
     time_finished = db.Column(db.DateTime)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     state = db.Column(db.String(10))
+    max_value = db.Column(db.Integer)
+    points = db.Column(db.Integer)
     progress = db.Column(db.Integer, CheckConstraint('progress>=0 & progress<=100'),default=0)
 
     def init_from_file(self, filepath, user):
         self.time_started = datetime.datetime.now()
         self.state = "working"
-        file = open(filepath, 'r')
-        self.input = file.read()
         self.user_id = user.id
+        file = open(filepath, 'r')
+        self.points = int(file.readline())
+        self.max_value = int(file.readline())
 
+        for i in range(1,self.points + 1):
+            point = PointIn()
+            x, y = file.readline().split()
+            point.add_new_point(self.id, i ,int(x),int(y))
+            db.session.add(point)
+            db.session.commit()
 
     def add_waiting_task(self, user):
         self.user_id = user.id
         self.state="waiting"
+        return self
+
+class PointIn(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    number = db.Column(db.Integer)
+    x = db.Column(db.Integer)
+    y = db.Column(db.Integer)
+    task_id = db.Column(db.Integer, db.ForeignKey('task.id'))
+
+    def add_new_point(self, task, number, x , y):
+        self.task_id = task
+        self.x = x
+        self.y = y
+        self.number = number
+        return self
+
+
+class PointOut(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    number = db.Column(db.Integer)
+    x = db.Column(db.Integer)
+    y = db.Column(db.Integer)
+    task_id = db.Column(db.Integer, db.ForeignKey('task.id'))
+
+    def add_new_point(self, task, number, x , y):
+        self.task_id = task
+        self.x = x
+        self.y = y
+        self.number = number
         return self
