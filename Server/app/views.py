@@ -1,7 +1,7 @@
 from flask import render_template, flash, redirect, session, url_for, request, g, jsonify
 from flask.ext.login import login_user, logout_user, current_user, login_required
 from app import app, db, lm
-from .models import User, Task
+from .models import User, Task, PointIn, PointOut
 
 from werkzeug.security import generate_password_hash, check_password_hash
 from werkzeug.utils import secure_filename
@@ -26,6 +26,7 @@ def tsp():
                            title='Algorytm TSP')
 
 @app.route('/_active_task')
+@login_required
 def _active_task():
     tasks = Task.query.filter_by(user_id = g.user.id)
     user_tasks = 0
@@ -34,6 +35,7 @@ def _active_task():
     return jsonify(result = user_tasks)
 
 @app.route('/_working_task')
+@login_required
 def _working_task():
     tasks = Task.query.filter_by(user_id = g.user.id)
     user_tasks = 0
@@ -44,6 +46,7 @@ def _working_task():
 
 
 @app.route('/_update_progress')
+@login_required
 def _update_progress():
     tasks = Task.query.filter_by(user_id = g.user.id)
     message = {}
@@ -54,6 +57,7 @@ def _update_progress():
 
 
 @app.route('/_add_active_task')
+@login_required
 def _add_active_task():
     tasks = Task.query.filter_by(user_id = g.user.id)
     user_tasks = 0
@@ -96,12 +100,29 @@ def add_task():
 
 
         task.init_from_file(filepath, g.user)
-        # db.session.add(task)
+        db.session.add(task)
         db.session.commit()
 
         flash("Dodano zadanie", 'add_task-msg')
 
     return redirect(url_for('tsp'))
+
+@app.route('/_user_task_points')
+@login_required
+def _login_task_points():
+    tasks = Task.query.filter_by(user_id = g.user.id)
+    user_tasks = 0
+    message = {}
+    i = 1
+    for task in tasks:
+        message[str(i)] = []
+        points = PointIn.query.filter_by(task_id = task.id).order_by(PointIn.number)
+        scale = 300/task.max_value
+        for point in points:
+            message[str(i)].append(scale*point.x)
+            message[str(i)].append(scale*point.y)
+        i += 1
+    return jsonify(result = message)
 
 @lm.user_loader
 def load_user(id):
