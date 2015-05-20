@@ -1,5 +1,21 @@
 # AIiR_1115_komiwojazer
 
+20-05-2015 Zmiany w bazie danych i sposobie obslugi punktow
+
+Dodalem 2 nowe tabele point_in, point_out<br>
+
+Przechowuja one poszczegolne wspolrzedne i ich numer.<br>
+
+Format pliku tekstowego:<br>
+Ilosc punktow<br>
+Maksymalny punkt (maksymalna wartosc punktu)<br>
+x1 y1<br>
+...<br>
+xN yN<br>
+
+
+
+
 19-05-2015 Wielki commit frontendowy
 
 Dodano:
