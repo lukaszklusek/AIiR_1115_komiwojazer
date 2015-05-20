@@ -8,6 +8,7 @@
 
 $(document).ready(function() {
     initTasks();
+    updateProgress();
     $("#next-1").click(function(){
         addTask();
     });
@@ -17,7 +18,7 @@ $(document).ready(function() {
     setInterval("updateProgress()", 1000);
 
 
-
+    canvas();
 });
 
 
@@ -34,10 +35,10 @@ function addTask(){
                     <div class=\"algorithm-in\">\
                     <div class=\"row col-md-6\">\
                     <h3>Wybierz punkty z pliku tekstowego</h3>\
-                    <form action=\"tsp/add_task\" method=\"post\" enctype=\"multipart/form-data\">\
+                    <form id=\"choose1-"+ i +"\" action=\"tsp/add_task\" method=\"post\" enctype=\"multipart/form-data\">\
                     <h5>Wybierz plik tekstowy</h5>\
                     <p><input type=\"file\" name=\"fileToUpload\" id=\"fileToUpload1-"+ i +"\"></p>\
-                    <p><input type=\"submit\" value=\"Rozpocznij algorytm\" name=\"submit1-"+i+"\"></p>\
+                    <p><input type=\"submit\" class=\"start\" value=\"Rozpocznij algorytm\" id=\"submit1-"+i+"\" name=\"submit1-"+i+"\"></p>\
                     </form>\
                     </div>\
                     <div class=\"row col-md-6\">\
@@ -45,7 +46,7 @@ function addTask(){
                     <ul>\
                     <li id=\"path-1-"+ i+"\">Najkrótsza droga : Rozpocznij algorytm.</li>\
                     <button id=\"show-1-"+ i+"\">Pokaż rozwiazanie</button> \
-                    \<button id=\"show-points-1-"+ i+"\">Pokaż zaadane punkty</button> \
+                    <button id=\"show-points-1-"+ i+"\" data-toggle=\"modal\" data-target=\"#input1-"+ i+"\">Pokaż zaadane punkty</button> \
                     </ul>\
                     <h4>Pasek postępu</h4>\
                     <div class=\"progress\">\
@@ -74,10 +75,10 @@ function initTasks(){
         <div class=\"algorithm-in\">\
         <div class=\"row col-md-6\">\
         <h3>Wybierz punkty z pliku tekstowego</h3>\
-        <form action=\"tsp/add_task\" method=\"post\" enctype=\"multipart/form-data\">\
+        <form id=\"choose1-"+ i +"\" action=\"tsp/add_task\" method=\"post\" enctype=\"multipart/form-data\">\
         <h5>Wybierz plik tekstowy</h5>\
         <p><input type=\"file\" name=\"fileToUpload\" id=\"fileToUpload1-"+ i +"\"></p>\
-        <p><input type=\"submit\" value=\"Rozpocznij algorytm\" name=\"submit1-"+i+"\"></p>\
+        <p><input type=\"submit\" value=\"Rozpocznij algorytm\" id=\"submit1-"+i+"\" name=\"submit1-"+i+"\"></p>\
         </form>\
         </div>\
         <div class=\"row col-md-6\">\
@@ -85,7 +86,7 @@ function initTasks(){
         <ul>\
         <li id=\"path-1-"+ i+"\">Najkrótsza droga : Rozpocznij algorytm.</li>\
         <button id=\"show-1-"+ i+"\">Pokaż rozwiazanie</button> \
-        <button id=\"show-points-1-"+ i+"\">Pokaż zaadane punkty</button> \
+        <button id=\"show-points-1-"+ i+"\" data-toggle=\"modal\" data-target=\"#input1-"+ i+"\">Pokaż zaadane punkty</button> \
         </ul>\
         <h4>Pasek postępu</h4>\
         <div class=\"progress\">\
@@ -109,7 +110,9 @@ function initTasks(){
 }
 
 function updateProgress(){
-
+    function startEvent(i){
+        $("#choose1-"+i+"").remove();
+    }
 
      $.getJSON($SCRIPT_ROOT + '/_update_progress', {
       }, function(data) {
@@ -119,8 +122,10 @@ function updateProgress(){
                   $("#ProgressBar1-"+i+"").css('width',''+itemData+'%').attr('aria-valuenow', itemData);
                   if (parseInt(itemData) > 0 && parseInt(itemData) < 100){
                       $("#path-1-"+i+"").html("Najkrótsza droga : Czekam...");
-                  }else if(parseInt(itemData) > 100){
+                      startEvent(i);
+                  }else if(parseInt(itemData) == 100){
                       $("#path-1-"+i+"").html("Najkrótsza droga : Done");
+                      startEvent(i);
                   }
                   i++;
               });
@@ -130,6 +135,72 @@ function updateProgress(){
 
 }
 
-function startTask(){
+
+
+
+function canvas(){
+
+
+            $.getJSON($SCRIPT_ROOT + '/_active_task', {
+      }, function(data) {
+                $.getJSON($SCRIPT_ROOT + '/_user_task_points', {
+          }, function(data2) {
+            var activeTasks = data.result;
+            drawPoints(activeTasks)
+            var j = 1;
+          $.each(data2, function() {
+              $.each(this, function(index, itemData) {
+                  var canvas = document.getElementById("canvas1-"+ j +"");
+                  var ctx = canvas.getContext("2d");
+                  console.log(index + " " + itemData);
+                for (i = 0 ; i < itemData.length - 1 ; i++){
+                    //x = i y = i+1
+                    ctx.fillRect(itemData[i],itemData[i+1],3,3);
+                }j++;
+              });
+        });
+        });
+    });
+
+
+
+
+
+    function getPoints(){
+    $(".get").click(function() {
+    var remId = this.id.substr(this.id.length-3,this.id.length);
+    alert(remId);
+    });
 
 }
+
+
+function drawPoints(taskCount){
+
+    for (var i = 1 ; i<= taskCount; i++){
+        $('.modals:last').append("\
+        <div class=\"modal fade\" id=\"input1-"+ i +"\" tabindex=\"-1\" role=\"dialog\" aria-labelledby=\"myModalLabel\" aria-hidden=\"true\">\
+        <div class=\"modal-dialog\">\
+        <div class=\"modal-content\">\
+        <div class=\"modal-header\">\
+        <button type=\"button\" class=\"close\" data-dismiss=\"modal\" aria-label=\"Close\"><span aria-hidden=\"true\">&times;</span></button>\
+        <h4 class=\"modal-title\" id=\"myModalLabel\">Twoje punkty wejściowe</h4>\
+        </div>\
+        <div class=\"modal-body\">\
+        <canvas class=\"myCanvas\" id=\"canvas1-"+ i +"\" width=\"300\" height=\"300\">\
+        </canvas>\
+        </div>\
+        <div class=\"modal-footer\">\
+        <button type=\"button\" id =\"draw1-"+ i + "\" class=\"btn btn-primary pull-left draw\">Rysuj ściezkę</button>\
+        <button type=\"button\" class=\"btn btn-default\" data-dismiss=\"modal\">Zamknij</button>\
+        </div>\
+        </div>\
+        </div>\
+        </div>\
+        ");
+    }
+}
+
+
+}
+
