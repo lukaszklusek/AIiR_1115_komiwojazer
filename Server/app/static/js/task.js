@@ -9,6 +9,8 @@
 $(document).ready(function() {
     initTasks();
     updateProgress();
+
+
     $("#next-1").click(function(){
         addTask();
     });
@@ -18,7 +20,8 @@ $(document).ready(function() {
     setInterval("updateProgress()", 1000);
 
 
-    canvas();
+    canvas(false);
+
 });
 
 
@@ -138,7 +141,7 @@ function updateProgress(){
 
 
 
-function canvas(){
+function canvas(connect,drawId){
 
 
             $.getJSON($SCRIPT_ROOT + '/_active_task', {
@@ -150,27 +153,55 @@ function canvas(){
             var j = 1;
           $.each(data2, function() {
               $.each(this, function(index, itemData) {
-                  var canvas = document.getElementById("canvas1-"+ j +"");
-                  var ctx = canvas.getContext("2d");
-                  console.log(index + " " + itemData);
-                for (i = 0 ; i < itemData.length - 1 ; i++){
-                    //x = i y = i+1
-                    ctx.fillRect(itemData[i],itemData[i+1],3,3);
-                }j++;
+                  if (connect == true){
+                      id = drawId.substr(drawId.length-1,drawId.length);
+                      if (id == index){
+                          connectPointsToCanvas(id, index, itemData)
+                      }
+                  }else if (connect == false) {
+                    drawPointsToCanvas(j,index,itemData);
+                    j++;
+                  }
               });
         });
         });
     });
 
+    function drawPointsToCanvas(j, index, itemData){
+                          var canvas = document.getElementById("canvas1-"+ j +"");
+                  var ctx = canvas.getContext("2d");
+                for (i = 0 ; i < itemData.length - 1 ; i++){
+                    //x = i y = i+1
+                    var x = 0
+                    if (i%2 == 0) x = i;
+                    ctx.fillRect(itemData[x],itemData[x+1],5,5);
+                }
+    }
 
-
-
-
-    function getPoints(){
-    $(".get").click(function() {
-    var remId = this.id.substr(this.id.length-3,this.id.length);
-    alert(remId);
-    });
+    function connectPointsToCanvas(j, index, itemData){
+                          var canvas = document.getElementById("canvas1-"+ j +"");
+                  var ctx = canvas.getContext("2d");
+                    ctx.strokeStyle = '#ff0000';
+                    line(ctx,itemData,0);
+        function line(ctx,itemData,i){
+            setTimeout(function () {
+               if (i%2 == 0) x = i;
+                console.log(itemData[x] + " " + itemData[x+1]);
+                ctx.moveTo(itemData[x],itemData[x+1]);
+                ctx.lineTo(itemData[x+2],itemData[x+3]);
+                ctx.stroke();
+              i++;
+                if (i == itemData.length - 2) {
+                    ctx.moveTo(itemData[i],itemData[i+1]);
+                    ctx.lineTo(itemData[0],itemData[1]);
+                    ctx.stroke();
+              }
+              if (i < itemData.length -2) {
+                 line(ctx,itemData,i);
+              }
+           }, 200)
+        }
+    }
 
 }
 
@@ -191,7 +222,7 @@ function drawPoints(taskCount){
         </canvas>\
         </div>\
         <div class=\"modal-footer\">\
-        <button type=\"button\" id =\"draw1-"+ i + "\" class=\"btn btn-primary pull-left draw\">Rysuj ściezkę</button>\
+        <button type=\"button\" id =\"draw1-"+ i + "\" onclick=\"test(this.id)\" class=\"btn btn-primary pull-left draw\">Rysuj ściezkę</button>\
         <button type=\"button\" class=\"btn btn-default\" data-dismiss=\"modal\">Zamknij</button>\
         </div>\
         </div>\
@@ -201,6 +232,8 @@ function drawPoints(taskCount){
     }
 }
 
-
+function test(id){
+    canvas(true,id);
 }
+
 

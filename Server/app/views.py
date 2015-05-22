@@ -110,14 +110,14 @@ def add_task():
 @app.route('/_user_task_points')
 @login_required
 def _login_task_points():
-    tasks = Task.query.filter_by(user_id = g.user.id)
+    tasks = Task.query.filter_by(user_id = g.user.id).filter_by(state = ("working" or "done"))
     user_tasks = 0
     message = {}
     i = 1
     for task in tasks:
         message[str(i)] = []
         points = PointIn.query.filter_by(task_id = task.id).order_by(PointIn.number)
-        scale = 300/task.max_value
+        scale = 290/task.max_value
         for point in points:
             message[str(i)].append(scale*point.x)
             message[str(i)].append(scale*point.y)
