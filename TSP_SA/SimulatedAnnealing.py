@@ -22,7 +22,7 @@ import time
 from mpi4py import MPI
 from mpi4py.MPI import ANY_SOURCE
 
-path = '../Server/app.db'
+path = '/home/lukas/Documents/AIiR_1115_komiwojazer/Server/app.db'
 connect = sqlite3.connect(path)
 connect.isolation_level = None
 
@@ -43,20 +43,17 @@ class SimulatedAnnealing(object):
             return 1.0
         return math.exp((energy-newEnergy)/temperature)
 
-    def algorithm(self, file):
+    def algorithm(self):
         tourManager = TourManager()
-        tourManager2 = TourManager()
-        tourManager3 = TourManager()
 
-        f = open(file,'r')
-        for line in f:
-            a=line.split()
-            ab = int(a[0])
-            abc = int(a[1])
-            city = City(ab, abc)
-            tourManager.addCity(city);
-
-        f.close()
+        for i in c:
+            for j in range(1,i[0]):
+                c.execute("SELECT x FROM point_in WHERE task_id = ? AND number = ?", (task_id[0], j))
+                ab = c.fetchone()
+                c.execute("SELECT y FROM point_in WHERE task_id = ? AND number = ?", (task_id[0], j))
+                abc = c.fetchone()
+                city = City(ab[0], abc[0])
+                tourManager.addCity(city);
 
         temp = 1000
         coolingRate = 0.002
@@ -65,9 +62,7 @@ class SimulatedAnnealing(object):
         currentSolution.generateIndividual()
 
         print(currentSolution)
-        start=currentSolution
         print("Initial solution distance: " + str(currentSolution.getDistance()))
-        poczatek = str(currentSolution.getDistance())
 
         best = Tour(tourManager)
         best.generateIndividual()
@@ -95,57 +90,83 @@ class SimulatedAnnealing(object):
             if (currentSolution.getDistance() < best.getDistance()):
                 best.cpTour(currentSolution.tourManager)
 
-            #temp -= 100
-            koniec = best.getDistance()
             temp *= 1-coolingRate
-
-        #connect.execute('INSERT INTO task (input, output, time_started, user_id) VALUES (?, ?, current_timestamp, 1)',(poczatek, koniec))
 
         return best.getDistance()
 
+state = ('working',)
+c.execute("SELECT MIN(id) FROM task WHERE state = ?", state)
+task_id = c.fetchone()
+c.execute("SELECT points FROM task WHERE id = ?", task_id)
 
+sb = numpy.zeros(1)
+sa = SimulatedAnnealing()
+
+sb[0]=sa.algorithm()
+
+print sb, "Najlepszy wedlug ", rank
+
+recv_buffer = numpy.zeros(1)
 
 if rank == 0:
-    #while(1):
-        #c.execute("""select id,... from task where state='waiting' order by time_started;""")
-        #task = c.fetchone()
-        #if task:
-            #task_id = task[0]
-            #file = task[ileśtam]
-
-            #connect.execute('UPDATE task SET state='in progress', progress=0 WHERE id=?', (task_id))
-
-            file = 'test.txt'
-            for i in range(1, size):
-                comm.Send(file, dest=i)
-
-            recv_buffer = numpy.zeros(1)
-            so_best = 99999999999
-            for i in range(1, size):
+        c.execute("UPDATE task SET state= 'progress' WHERE id = ?", task_id)
+        so_best = sb[0]
+        for i in range(1, size):
                 comm.Recv(recv_buffer, ANY_SOURCE)
                 if (so_best>recv_buffer):
                     so_best = recv_buffer[0]
-                progress = 100/size*i
-                #connect.execute('UPDATE task SET progress=? WHERE id=?', (progress, task_id))
-        #else:
-            #time.sleep(1)
 
+               # print ("Final solution distance the best: ", so_best)
 else:
-        #while(1):
-            # all other process send their result
-            filename = numpy.zeros(1)
-            comm.Recv(filename, source=0)
-            sb = numpy.zeros(1)
-            sa = SimulatedAnnealing()
-            sb[0]=sa.algorithm(filename)
-            comm.Send(sb, dest=0)
-            print sb, "Najlepszy wedlug ", rank
+        # all other process send their result
+        print "Pracuje proces: ", rank
+        comm.Send(sb)
+
 
 if comm.rank == 0:
     print "Final solution distance the best: ", so_best
+    c.execute("UPDATE task SET state= 'end' WHERE id = ?", task_id)
 
 
 connect.close()
 
+#if rank == 0:
+    #while(1):
 
+       # c.execute("""select id,... from task where state='waiting' order by time_started;""")
+       # task = c.fetchone()
+       # if task:
+       #     task_id = task[0]
+       #     file = task[ileśtam]
 
+       #     connect.execute('UPDATE task SET state='in progress', progress=0 WHERE id=?', (task_id))
+
+       #     file = 'test.txt'
+       #     for i in range(1, size):
+       #         comm.Send(file, dest=i)
+       #     recv_buffer = numpy.zeros(1)
+       #     so_best = 99999999999
+       #     for i in range(1, size):
+       #        comm.Recv(recv_buffer, ANY_SOURCE)
+       #         if (so_best>recv_buffer):
+       #             so_best = recv_buffer[0]
+       #         progress = 100/size*i
+       #         connect.execute('UPDATE task SET progress=? WHERE id=?', (progress, task_id))
+       # else:
+           # time.sleep(1)
+
+#else:
+        #while(1):
+            # all other process send their result
+        #    filename = numpy.zeros(1)
+        #    comm.Recv(filename, source=0)
+        #    sb = numpy.zeros(1)
+        #    sa = SimulatedAnnealing()
+        #    sb[0]=sa.algorithm(filename)
+        #    comm.Send(sb, dest=0)
+        #    print sb, "Najlepszy wedlug ", rank
+
+#if comm.rank == 0:
+ #   print "Final solution distance the best: ", so_best
+
+#connect.close()
