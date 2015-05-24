@@ -50,7 +50,10 @@ class Tour(object):
     def __str__(self):
         geneString = ""
         for i in range (0,self.tourSize()):
-            geneString += str(self.getCity(i))+"|"
+            if ( i == self.tourSize()-1):
+                geneString += str(self.getCity(i))
+            else:
+                geneString += str(self.getCity(i))+"|"
         return  geneString
 
 
