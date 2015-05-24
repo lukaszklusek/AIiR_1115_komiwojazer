@@ -2,7 +2,7 @@ from flask import render_template, flash, redirect, session, url_for, request, g
 from flask.ext.login import login_user, logout_user, current_user, login_required
 from app import app, db, lm
 from .models import User, Task, PointIn, PointOut
-
+from sqlalchemy import or_
 from werkzeug.security import generate_password_hash, check_password_hash
 from werkzeug.utils import secure_filename
 import os
@@ -29,6 +29,15 @@ def tsp():
 @login_required
 def _active_task():
     tasks = Task.query.filter_by(user_id = g.user.id)
+    user_tasks = 0
+    for task in tasks:
+            user_tasks += 1
+    return jsonify(result = user_tasks)
+
+@app.route('/_done_task')
+@login_required
+def _done_task():
+    tasks = Task.query.filter_by(user_id = g.user.id).filter_by(state = "done")
     user_tasks = 0
     for task in tasks:
             user_tasks += 1
@@ -110,7 +119,7 @@ def add_task():
 @app.route('/_user_task_points')
 @login_required
 def _login_task_points():
-    tasks = Task.query.filter_by(user_id = g.user.id).filter_by(state = ("working" or "done"))
+    tasks = Task.query.filter_by(user_id = g.user.id).filter(or_(Task.state == "working",Task.state == "done"))
     user_tasks = 0
     message = {}
     i = 1
@@ -118,6 +127,25 @@ def _login_task_points():
         message[str(i)] = []
         points = PointIn.query.filter_by(task_id = task.id).order_by(PointIn.number)
         scale = 290/task.max_value
+        for point in points:
+            message[str(i)].append(scale*point.x)
+            message[str(i)].append(scale*point.y)
+        i += 1
+    return jsonify(result = message)
+
+@app.route('/_user_done_task_points')
+@login_required
+def _login__done_task_points():
+    tasks = Task.query.filter_by(user_id = g.user.id).filter(Task.state == "done")
+    user_tasks = 0
+    message = {}
+    i = 1
+    for task in tasks:
+        message[str(i)] = []
+        points = PointOut.query.filter_by(task_id = task.id).order_by(PointOut.number)
+        scale = 290/task.max_value
+        message[str(i)].append(task.id)
+        message[str(i)].append(task.id)
         for point in points:
             message[str(i)].append(scale*point.x)
             message[str(i)].append(scale*point.y)
