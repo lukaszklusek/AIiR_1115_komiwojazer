@@ -143,7 +143,7 @@ if comm.rank == 0:
         a=a+2
         b=b+2
 
-    c.execute("UPDATE task SET state= 'end', time_finished = (STRFTIME('%Y-%m-%d %H:%M:%f', 'NOW')), progress = 100 WHERE id = ?", task_id)
+    c.execute("UPDATE task SET state= 'done', time_finished = (STRFTIME('%Y-%m-%d %H:%M:%f', 'NOW')), progress = 100 WHERE id = ?", task_id)
 
 
 connect.close()
