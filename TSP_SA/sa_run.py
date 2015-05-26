@@ -12,11 +12,13 @@ while(1):
     state = ('working',)
     c.execute("SELECT MIN(id) FROM task WHERE state = ?", state)
     result=c.fetchone()
-
-    print result[0]
+    cmd = "mpiexec -n 4 python SimulatedAnnealing.py".split()
+    #Powinno zadzialac jak w hosts damy ip virtualki lub stacji
+    #U mnie chyba dzialalo
+    #cmd_2 = "mpiexec -hostfile hosts -n 4 python SimulatedAnnealing.py".split()
 
     if result[0] is not None:
-        #subprocess.call("mpiexec", "-n", "4", "python", "SimulatedAnnealing.py ", +result)
-        os.system("mpiexec -n 4 python SimulatedAnnealing.py")
+        subprocess.call(cmd + [str(result[0])])
+        #os.system("mpiexec -n 4 python SimulatedAnnealing.py")
     else:
         time.sleep(30)
