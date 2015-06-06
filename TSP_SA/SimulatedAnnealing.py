@@ -105,7 +105,7 @@ class SimulatedAnnealing(object):
         wynik_trasy_array = [str(best)]
         global wsp_city
         wsp_city = ((((((str(wynik_trasy_array[:]).replace("'","")).replace("[","")).replace("]","")).replace("(","")).replace(")","")).replace(",","|")).split('|')
-        return best.getDistance()select * from task
+        return best.getDistance()
 
 
 state = ('working',)
