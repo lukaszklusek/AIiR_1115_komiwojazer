@@ -22,3 +22,4 @@ while(1):
         #os.system("mpiexec -n 4 python SimulatedAnnealing.py")
     else:
         time.sleep(30)
+        print 'Czekam'
