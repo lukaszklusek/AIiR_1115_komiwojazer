@@ -49,7 +49,7 @@ def _working_task():
     tasks = Task.query.filter_by(user_id = g.user.id)
     user_tasks = 0
     for task in tasks:
-        if(task.state == "working"):
+        if(task.state == "working" or task.state == "ready"):
             user_tasks += 1
     return jsonify(result = user_tasks)
 
@@ -73,7 +73,7 @@ def _add_active_task():
     test = 0
     for x in tasks:
         user_tasks += 1
-        if (x.state == "working" or x.state == "done"):
+        if (x.state == "working" or x.state == "done" or  x.state == "ready"):
             test += 1
 
     # Sprawdzenie czy dodaje nowe zadanie przez rozpoczeciem/skonczeniem poprzedniego
@@ -119,7 +119,7 @@ def add_task():
 @app.route('/_user_task_points')
 @login_required
 def _login_task_points():
-    tasks = Task.query.filter_by(user_id = g.user.id).filter(or_(Task.state == "working",Task.state == "done"))
+    tasks = Task.query.filter_by(user_id = g.user.id).filter(or_(Task.state == "working",Task.state == "ready",Task.state == "done"))
     user_tasks = 0
     message = {}
     i = 1

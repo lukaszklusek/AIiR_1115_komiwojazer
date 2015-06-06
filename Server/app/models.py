@@ -47,7 +47,7 @@ class Task(db.Model):
 
     def init_from_file(self, filepath, user):
         self.time_started = datetime.datetime.now()
-        self.state = "working"
+        self.state = "ready"
         self.user_id = user.id
         file = open(filepath, 'r')
         self.points = int(file.readline())
