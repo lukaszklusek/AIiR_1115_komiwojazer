@@ -37,28 +37,47 @@ class User(db.Model):
 
 class Task(db.Model):
     id = db.Column(db.Integer, primary_key=True)
+    best = db.Column(db.Integer)
     time_started = db.Column(db.DateTime)
     time_finished = db.Column(db.DateTime)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     state = db.Column(db.String(10))
-    max_value = db.Column(db.Integer)
+    max_x_value = db.Column(db.Integer)
+    max_y_value = db.Column(db.Integer)
+    min_x_value = db.Column(db.Integer)
+    min_y_value = db.Column(db.Integer)
     points = db.Column(db.Integer)
     progress = db.Column(db.Integer, CheckConstraint('progress>=0 & progress<=100'),default=0)
 
     def init_from_file(self, filepath, user):
+        self.best = 999999
         self.time_started = datetime.datetime.now()
         self.state = "ready"
         self.user_id = user.id
         file = open(filepath, 'r')
         self.points = int(file.readline())
-        self.max_value = int(file.readline())
-
+        maxXValue=0
+        maxYValue=0
+        minXValue=9999999
+        minYValue=9999999
         for i in range(1,self.points + 1):
             point = PointIn()
             x, y = file.readline().split()
+            if (int(x) > maxXValue):
+                maxXValue=int(x)
+            if (int(y) > maxYValue):
+                maxYValue=int(y)
+            if (int(x) < minXValue):
+                minXValue=int(x)
+            if (int(y) < minYValue):
+                minYValue=int(y)
             point.add_new_point(self.id, i ,int(x),int(y))
             db.session.add(point)
             db.session.commit()
+        self.max_x_value = maxXValue
+        self.min_x_value = minXValue
+        self.max_y_value = maxYValue
+        self.min_y_value = minYValue
 
     def add_waiting_task(self, user):
         self.user_id = user.id

@@ -126,10 +126,11 @@ def _login_task_points():
     for task in tasks:
         message[str(i)] = []
         points = PointIn.query.filter_by(task_id = task.id).order_by(PointIn.number)
-        scale = 290/task.max_value
+        scaleX = 290/task.max_x_value
+        scaleY = 290/task.max_y_value
         for point in points:
-            message[str(i)].append(scale*point.x)
-            message[str(i)].append(scale*point.y)
+            message[str(i)].append(scaleX*(point.x - task.min_x_value))
+            message[str(i)].append(scaleY*(point.y - task.min_y_value))
         i += 1
     return jsonify(result = message)
 
@@ -143,12 +144,13 @@ def _login__done_task_points():
     for task in tasks:
         message[str(i)] = []
         points = PointOut.query.filter_by(task_id = task.id).order_by(PointOut.number)
-        scale = 290/task.max_value
+        scaleX = 290/task.max_x_value
+        scaleY = 290/task.max_y_value
         message[str(i)].append(task.id)
         message[str(i)].append(task.id)
         for point in points:
-            message[str(i)].append(scale*point.x)
-            message[str(i)].append(scale*point.y)
+            message[str(i)].append(scaleX*(point.x - task.min_x_value))
+            message[str(i)].append(scaleY*(point.y - task.min_y_value))
         i += 1
     return jsonify(result = message)
 

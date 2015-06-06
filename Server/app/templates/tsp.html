@@ -4,25 +4,6 @@
 <!-- Modal -->
 
 </div>
-{#<div class="modal fade" id="input1-1" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">#}
-{#  <div class="modal-dialog">#}
-{#    <div class="modal-content">#}
-{#      <div class="modal-header">#}
-{#        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>#}
-{#        <h4 class="modal-title" id="myModalLabel">Twoje punkty wejściowe</h4>#}
-{#      </div>#}
-{#      <div class="modal-body">#}
-{#        <canvas class="myCanvas" id="canvas1-1" width="300" height="300">#}
-{##}
-{#        </canvas>#}
-{#      </div>#}
-{#      <div class="modal-footer">#}
-{#         <button type="button" id ="draw1-1" class="btn btn-primary pull-left draw">Rysuj ściezkę</button>#}
-{#        <button type="button" class="btn btn-default" data-dismiss="modal">Zamknij</button>#}
-{#      </div>#}
-{#    </div>#}
-{#  </div>#}
-{#</div>#}
     <!-- Page Content -->
 
         <a  name=""></a>
@@ -48,17 +29,30 @@
 
         <div class="container">
 
-            <h2 class="pointer">Wybierz swoje współrzędne </h2>
-            <div class="algorithm">
-                <div class="row col-md-6">
-                    <div class="progress">
-                        <div class="progress-bar" id="getProgressBar" role="progressbar" aria-valuenow="1"
-                            aria-valuemin="0" aria-valuemax="100" style="width:1%">
-
-                        </div>
-                    </div>
-                </div>
-            </div>
+            <h2>Instrukcja działania aplikacji </h2>
+            <h4>Niniejża aplikacja pozwala na obliczenie najkrótszej trasy komiwojażera wykorzystując algorytm symulowanego wyżarzania</h4>
+            <ol>
+                <li>Kliknij na pole 'wypróbuj algorytm' aby rozwinąć listę zadań</li>
+                <li>Dodaj nowe zadanie</li>
+                <li>Naciśnij przysisk przeglądaj aby wybrać plik tekstowy ze współrzędnymi punktów miast
+                   <ul>
+                        <li><strong>Format pliku jest następujący</strong></li>
+                        <li>Ilość punktów</li>
+                        <li>WspółrzędnaPierwszegoPunktuX WspółrzędnaPierwszegoPunktuY</li>
+                        <li>...</li>
+                        <li>WspółrzędnaN-tegoPunktuX WspółrzędnaN-TegoPunktuY</li>
+                        <li><strong>Przykład dla 3 punktów</strong></li>
+                        <li>3</li>
+                        <li>1 1</li>
+                        <li>5 5</li>
+                        <li>8 10</li>
+                   </ul>
+                </li>
+                <li>Nacisnij przycisk rozpocznij algorytm</li>
+                <li>Możesz zwizualizować wprowadzone punkty</li>
+                <li>Możesz równiez wyświetlić punkty po przerobieniu przez algorytm</li>
+                <li>Dodaj nowe zadanie</li>
+            </ol>
         </div>
         <!-- /.container -->
 
