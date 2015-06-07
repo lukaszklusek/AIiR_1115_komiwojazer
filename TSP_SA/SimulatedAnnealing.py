@@ -55,14 +55,22 @@ class SimulatedAnnealing(object):
 
     def algorithm(self):
         tourManager = TourManager()
+        tourManager1 = TourManager()
+        tourManager2 = TourManager()
 
-        for j in range(1,point[0]+1):
-            c.execute("SELECT x FROM point_in WHERE task_id = ? AND number = ?", (task_id_2, j))
-            ab = c.fetchone()
-            c.execute("SELECT y FROM point_in WHERE task_id = ? AND number = ?", (task_id_2, j))
-            abc = c.fetchone()
-            city = City(ab[0], abc[0])
-            tourManager.addCity(city);
+        try:
+            for j in range(1,point[0]+1):
+                c.execute("SELECT x FROM point_in WHERE task_id = ? AND number = ?", (task_id_2, j))
+                ab = c.fetchone()
+                c.execute("SELECT y FROM point_in WHERE task_id = ? AND number = ?", (task_id_2, j))
+                abc = c.fetchone()
+                city = City(ab[0], abc[0])
+                tourManager.addCity(city)
+                tourManager1.addCity(city)
+                tourManager2.addCity(city)
+        except:
+            print ("Baza jest uzywana! Probuje jeszcze raz")
+            time.sleep(20)
 
         temp = 1000
         coolingRate = 0.002
@@ -73,16 +81,16 @@ class SimulatedAnnealing(object):
         print(currentSolution)
         print("Initial solution distance: " + str(currentSolution.getDistance()))
 
-        best = Tour(tourManager)
+        best = Tour(tourManager1)
 
         best.generateIndividual()
-        best.cpTour(currentSolution.tourManager)
+        best.cpTour(currentSolution)
 
-        newSolution = Tour(tourManager)
+        newSolution = Tour(tourManager2)
         newSolution.generateIndividual()
         while (temp > 1):
 
-            newSolution.cpTour(currentSolution.tourManager)
+            newSolution.cpTour(currentSolution)
             tourPos1 = random.randint(0,newSolution.tourSize()-1)
             tourPos2 = random.randint(0,newSolution.tourSize()-1)
 
@@ -96,9 +104,9 @@ class SimulatedAnnealing(object):
             neighbourEnergy = newSolution.getDistance()
 
             if (self.acceptanceProbability(currentEnergy,neighbourEnergy,temp) > random.random()):
-                currentSolution.cpTour(newSolution.tourManager)
+                currentSolution.cpTour(newSolution)
             if (currentSolution.getDistance() < best.getDistance()):
-                best.cpTour(currentSolution.tourManager)
+                best.cpTour(currentSolution)
 
             temp *= 1-coolingRate
 
@@ -107,13 +115,16 @@ class SimulatedAnnealing(object):
         wsp_city = ((((((str(wynik_trasy_array[:]).replace("'","")).replace("[","")).replace("]","")).replace("(","")).replace(")","")).replace(",","|")).split('|')
         return best.getDistance()
 
+try:
+    state = ('working',)
+    c.execute("SELECT MIN(id) FROM task WHERE state = ?", state)
+    task_id = c.fetchone()
 
-state = ('working',)
-c.execute("SELECT MIN(id) FROM task WHERE state = ?", state)
-task_id = c.fetchone()
-
-c.execute("SELECT points FROM task WHERE id = ?", (task_id_2,))
-point = c.fetchone()
+    c.execute("SELECT points FROM task WHERE id = ?", (task_id_2,))
+    point = c.fetchone()
+except:
+    print ("Baza jest uzywana! Probuje jeszcze raz")
+    time.sleep(20)
 
 sb = numpy.zeros(1)
 sa = SimulatedAnnealing()

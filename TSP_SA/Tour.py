@@ -29,7 +29,7 @@ class Tour(object):
 
     def cpTour(self,tourManager):
         for i in range(0,self.tourManager.numberOfCities()):
-            self.tourManager.setDestinationCity(i,tourManager.getDestinationCity(i))
+            self.setCity(i,tourManager.getCity(i))
 
     def tourSize(self):
         return len(self.tour)
