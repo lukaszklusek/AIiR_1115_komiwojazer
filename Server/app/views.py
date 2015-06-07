@@ -60,8 +60,14 @@ def _update_progress():
     tasks = Task.query.filter_by(user_id = g.user.id)
     message = {}
     message['value'] = []
+    message['best'] = []
+    message['startTime'] = []
+    message['endTime'] = []
     for task in tasks:
         message['value'].append(task.progress)
+        message['best'].append(task.best)
+        message['startTime'].append(task.time_started)
+        message['endTime'].append(task.time_finished)
     return jsonify(message)
 
 

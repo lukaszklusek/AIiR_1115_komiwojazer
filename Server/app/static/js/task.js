@@ -4,7 +4,7 @@
 /**
  * Created by Wiktor on 2015-04-26.
  */
-
+drawSpeed = 200;
 
 $(document).ready(function() {
     initTasks();
@@ -38,7 +38,9 @@ function addTask(){
                 $('#algorithm1:last').append("\
                     <div class=\"algorithm-in\">\
                     <div class=\"row col-md-6\">\
+                    <div id=\"date-1-"+ i+"\">\
                     <h3>Wybierz punkty z pliku tekstowego</h3>\
+                    </div>\
                     <form id=\"choose1-"+ i +"\" action=\"tsp/add_task\" method=\"post\" enctype=\"multipart/form-data\">\
                     <h5>Wybierz plik tekstowy</h5>\
                     <p><input type=\"file\" name=\"fileToUpload\" id=\"fileToUpload1-"+ i +"\"></p>\
@@ -78,7 +80,9 @@ function initTasks(){
                     $('#algorithm1:last').append("\
         <div class=\"algorithm-in\">\
         <div class=\"row col-md-6\">\
+        <div id=\"date-1-"+ i+"\">\
         <h3>Wybierz punkty z pliku tekstowego</h3>\
+        </div>\
         <form id=\"choose1-"+ i +"\" action=\"tsp/add_task\" method=\"post\" enctype=\"multipart/form-data\">\
         <h5>Wybierz plik tekstowy</h5>\
         <p><input type=\"file\" name=\"fileToUpload\" id=\"fileToUpload1-"+ i +"\"></p>\
@@ -116,24 +120,45 @@ function initTasks(){
 function updateProgress(){
     function startEvent(i){
         $("#choose1-"+i+"").remove();
+        $("#date-1-"+i+"").html("<h3>Pracuje...</h3>");
     }
 
      $.getJSON($SCRIPT_ROOT + '/_update_progress', {
       }, function(data) {
-         var i=1;
-          $.each(data, function() {
-              $.each(this, function(index, itemData) {
+        var prog = data['value'];
+        var best = data['best'];
+        var startTime = data['startTime'];
+        var endTime = data['endTime'];
+        var i=1;
+        for (var val in prog) {
+            var itemData = prog[val];
                   $("#ProgressBar1-"+i+"").css('width',''+itemData+'%').attr('aria-valuenow', itemData);
                   if (parseInt(itemData) > 0 && parseInt(itemData) < 100){
                       $("#path-1-"+i+"").html("Najkrótsza droga : Czekam...");
                       startEvent(i);
                   }else if(parseInt(itemData) == 100){
-                      $("#path-1-"+i+"").html("Najkrótsza droga : Done");
-                      startEvent(i);
+                      $("#choose1-"+i+"").remove();
+                      $("#path-1-"+i+"").html("Najkrótsza droga : "+ best[val] +"");
+                      $("#date-1-"+i+"").html("<h3>Zadanie zakończone</h3>Data rozpoczęcia : "+ startTime[val] +"<br> Data zakończenia : "+ endTime[val] +"");
+
                   }
                   i++;
-              });
-        });
+        }
+
+
+        //  $.each(prog, function() {
+        //      $.each(this, function(index, itemData) {
+        //          $("#ProgressBar1-"+i+"").css('width',''+itemData+'%').attr('aria-valuenow', itemData);
+        //          if (parseInt(itemData) > 0 && parseInt(itemData) < 100){
+        //              $("#path-1-"+i+"").html("Najkrótsza droga : Czekam...");
+        //              startEvent(i);
+        //          }else if(parseInt(itemData) == 100){
+        //              $("#path-1-"+i+"").html("Najkrótsza droga : Done");
+        //              startEvent(i);
+        //          }
+        //          i++;
+        //      });
+        //});
       });
 
 
@@ -200,7 +225,7 @@ function canvas(connect,drawId){
               if (i < itemData.length -2) {
                  line(ctx,itemData,i);
               }
-           }, 200)
+           }, drawSpeed)
         }
     }
 
@@ -287,6 +312,8 @@ function drawPoints(taskCount){
         </div>\
         <div class=\"modal-footer\">\
         <button type=\"button\" id =\"draw1-"+ i + "\" onclick=\"openInitPoints(this.id)\" class=\"btn btn-primary pull-left draw\">Rysuj ściezkę</button>\
+        <button type=\"button\" class=\"btn btn-default pull-left\" onclick=\"faster()\" >Szybciej</button>\
+        <button type=\"button\" class=\"btn btn-default pull-left\" onclick=\"slower()\" >Wolniej</button>\
         <button type=\"button\" class=\"btn btn-default\" data-dismiss=\"modal\">Zamknij</button>\
         </div>\
         </div>\
@@ -305,6 +332,8 @@ function drawPoints(taskCount){
         </div>\
         <div class=\"modal-footer\">\
         <button type=\"button\" id =\"draw1-"+ i + "\" onclick=\"openDonePoints(this.id)\" class=\"btn btn-primary pull-left draw\">Rysuj ściezkę</button>\
+        <button type=\"button\" class=\"btn btn-default pull-left\" onclick=\"faster()\" >Szybciej</button>\
+        <button type=\"button\" class=\"btn btn-default pull-left\" onclick=\"slower()\" >Wolniej</button>\
         <button type=\"button\" class=\"btn btn-default\" data-dismiss=\"modal\">Zamknij</button>\
         </div>\
         </div>\
@@ -313,6 +342,20 @@ function drawPoints(taskCount){
         ");
     }
 
+}
+
+function faster(){
+    if ((drawSpeed - 10 ) > 0 ){
+        drawSpeed -= 10;
+    }else{
+        if ((drawSpeed - 1 ) > 0 ){
+            drawSpeed -= 1;
+        }
+    }
+}
+
+function slower(){
+        drawSpeed += 10;
 }
 
 function openInitPoints(id){
