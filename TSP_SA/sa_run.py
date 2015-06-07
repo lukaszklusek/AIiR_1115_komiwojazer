@@ -8,6 +8,7 @@ connect = sqlite3.connect(path)
 connect.isolation_level = None
 c = connect.cursor()
 
+
 while(1):
     try:
         state = ('ready',)
@@ -23,7 +24,7 @@ while(1):
             #os.system("mpiexec -n 4 python SimulatedAnnealing.py")
         else:
             print ("Czekam")
-            time.sleep(10)
+            time.sleep(5)
     except:
         print ("Baza jest uzywana! Probuje jeszcze raz")
         time.sleep(20)

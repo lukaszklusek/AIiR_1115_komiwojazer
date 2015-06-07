@@ -72,14 +72,21 @@ class SimulatedAnnealing(object):
             print ("Baza jest uzywana! Probuje jeszcze raz")
             time.sleep(20)
 
-        temp = 1000
-        coolingRate = 0.002
+        temp = 100000
+        start_temp = temp/5
+        coolingRate = 0.001
 
         currentSolution = Tour(tourManager)
         currentSolution.generateIndividual()
 
         print(currentSolution)
         print("Initial solution distance: " + str(currentSolution.getDistance()))
+        global progressBar
+        c.execute("SELECT progress FROM task WHERE id = ?", (task_id_2,))
+        progressBar1 = c.fetchone()
+        progressBar = progressBar1[0]
+        progressBar +=1
+        c.execute("UPDATE task SET progress = ?, state= 'working' WHERE id = ?", (progressBar,task_id_2))
 
         best = Tour(tourManager1)
 
@@ -88,6 +95,8 @@ class SimulatedAnnealing(object):
 
         newSolution = Tour(tourManager2)
         newSolution.generateIndividual()
+        ile_wejsc = 5
+        progressBar
         while (temp > 1):
 
             newSolution.cpTour(currentSolution)
@@ -110,6 +119,17 @@ class SimulatedAnnealing(object):
 
             temp *= 1-coolingRate
 
+            print math.floor(temp)
+
+            if(math.floor(temp) < start_temp*ile_wejsc-1 and ile_wejsc > 1 ):
+                c.execute("SELECT progress FROM task WHERE id = ?", (task_id_2,))
+                progressBar1 = c.fetchone()
+                progressBar = progressBar1[0]
+                print "bylem"
+                progressBar +=1
+                c.execute("UPDATE task SET progress = ?, state= 'working' WHERE id = ?", (progressBar,task_id_2))
+                ile_wejsc -=1
+
         wynik_trasy_array = [str(best)]
         global wsp_city
         wsp_city = ((((((str(wynik_trasy_array[:]).replace("'","")).replace("[","")).replace("]","")).replace("(","")).replace(")","")).replace(",","|")).split('|')
@@ -119,7 +139,7 @@ try:
     state = ('working',)
     c.execute("SELECT MIN(id) FROM task WHERE state = ?", state)
     task_id = c.fetchone()
-
+    c.execute("UPDATE task SET progress = 1, state= 'working' WHERE id = ?", (task_id_2,))
     c.execute("SELECT points FROM task WHERE id = ?", (task_id_2,))
     point = c.fetchone()
 except:
@@ -141,7 +161,8 @@ if rank == 0:
                 comm.Recv(recv_buffer, ANY_SOURCE)
                 progress_precent=math.fabs(progress_precent + 100/size)
                 print progress_precent
-                c.execute("UPDATE task SET progress = ?, state= 'progress' WHERE id = ?", (progress_precent,task_id_2))
+                c.execute("UPDATE task SET progress = ?, state= 'working' WHERE id = ?", (progress_precent,task_id_2))
+                time.sleep(1)
                 if (so_best>recv_buffer):
                     so_best = recv_buffer[0]
 else:
@@ -154,12 +175,11 @@ if comm.rank == 0:
     print "Final solution distance the best: ", so_best
     wynik = map(int, wsp_city)
     for y in range (1,point[0]+1):
-        #print wynik[a], ", ", wynik[b]
         c.execute("INSERT INTO point_out (number,x,y,task_id) VALUES (?, ?, ?, ?)", (y,wynik[a],wynik[b],task_id_2))
         a=a+2
         b=b+2
 
-    c.execute("UPDATE task SET state= 'done', time_finished = (STRFTIME('%Y-%m-%d %H:%M:%f', 'NOW')), progress = 100 WHERE id = ?", (task_id_2,))
+    c.execute("UPDATE task SET state= 'done', time_finished = (STRFTIME('%Y-%m-%d %H:%M:%f', 'NOW')), progress = 100, best = ? WHERE id = ?", (so_best,task_id_2))
 
 
 connect.close()
