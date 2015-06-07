@@ -5,6 +5,7 @@
  * Created by Wiktor on 2015-04-26.
  */
 drawSpeed = 200;
+drawnedTasks = [];
 
 $(document).ready(function() {
     initTasks();
@@ -140,7 +141,10 @@ function updateProgress(){
                       $("#choose1-"+i+"").remove();
                       $("#path-1-"+i+"").html("Najkrótsza droga : "+ best[val] +"");
                       $("#date-1-"+i+"").html("<h3>Zadanie zakończone</h3>Data rozpoczęcia : "+ startTime[val] +"<br> Data zakończenia : "+ endTime[val] +"");
-
+                      if (drawnedTasks[i] != undefined){
+                        canvasDone(false);
+                          drawnedTasks[i] = true;
+                      }
                   }
                   i++;
         }
@@ -212,7 +216,6 @@ function canvas(connect,drawId){
         function line(ctx,itemData,i){
             setTimeout(function () {
                if (i%2 == 0) x = i;
-                console.log(itemData[x] + " " + itemData[x+1]);
                 ctx.moveTo(itemData[x],itemData[x+1]);
                 ctx.lineTo(itemData[x+2],itemData[x+3]);
                 ctx.stroke();
@@ -232,8 +235,6 @@ function canvas(connect,drawId){
 }
 
 function canvasDone(connect,drawId){
-
-
             $.getJSON($SCRIPT_ROOT + '/_done_task', {
       }, function(data) {
                 $.getJSON($SCRIPT_ROOT + '/_user_done_task_points', {
@@ -256,11 +257,9 @@ function canvasDone(connect,drawId){
     });
 
     function drawDonePointsToCanvas(itemData){
-
         var canvas = document.getElementById("canvas2-"+ itemData[0] +"");
         var ctx = canvas.getContext("2d");
         for (i = 2 ; i < itemData.length - 1 ; i++){
-            console.log(canvas);
             //x = i y = i+1
             var x = 2
             if (i%2 == 0) x = i;
@@ -276,7 +275,6 @@ function canvasDone(connect,drawId){
         function line(ctx,itemData,i){
             setTimeout(function () {
                if (i%2 == 0) x = i;
-                console.log(itemData[x] + " " + itemData[x+1]);
                 ctx.moveTo(itemData[x],itemData[x+1]);
                 ctx.lineTo(itemData[x+2],itemData[x+3]);
                 ctx.stroke();
