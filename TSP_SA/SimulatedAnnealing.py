@@ -26,7 +26,7 @@ for arg in sys.argv:
 from mpi4py import MPI
 from mpi4py.MPI import ANY_SOURCE
 
-path = '/home/lukas/Documents/AIiR_1115_komiwojazer/Server/app.db'
+path = '/home/lukas/Documents/PycharmProjects/NOWY/AIiR_1115_komiwojazer/Server/app.db'
 connect = sqlite3.connect(path)
 connect.isolation_level = None
 
@@ -39,7 +39,7 @@ rank = comm.Get_rank()
 size = comm.Get_size()
 c = connect.cursor()
 
-if size<2:
+if size<1:
     print "Za mało procesów"
     exit(1)
 
@@ -112,7 +112,7 @@ state = ('working',)
 c.execute("SELECT MIN(id) FROM task WHERE state = ?", state)
 task_id = c.fetchone()
 
-c.execute("SELECT points FROM task WHERE id = ?", task_id_2)
+c.execute("SELECT points FROM task WHERE id = ?", (task_id_2,))
 point = c.fetchone()
 
 sb = numpy.zeros(1)
@@ -135,7 +135,7 @@ if rank == 0:
                     so_best = recv_buffer[0]
 else:
         # all other process send their result
-        print "Wysyła proces: ", rank
+        #print "Wysyła proces: ", rank
         comm.Send(sb)
 
 
@@ -143,12 +143,12 @@ if comm.rank == 0:
     print "Final solution distance the best: ", so_best
     wynik = map(int, wsp_city)
     for y in range (1,point[0]+1):
-        print wynik[a], ", ", wynik[b]
-        c.execute("INSERT INTO point_out (number,x,y,taks_id) VALUES (?, ?, ?, ?)", (y,wynik[a],wynik[b],task_id_2))
+        #print wynik[a], ", ", wynik[b]
+        c.execute("INSERT INTO point_out (number,x,y,task_id) VALUES (?, ?, ?, ?)", (y,wynik[a],wynik[b],task_id_2))
         a=a+2
         b=b+2
 
-    c.execute("UPDATE task SET state= 'done', time_finished = (STRFTIME('%Y-%m-%d %H:%M:%f', 'NOW')), progress = 100 WHERE id = ?", task_id_2)
+    c.execute("UPDATE task SET state= 'done', time_finished = (STRFTIME('%Y-%m-%d %H:%M:%f', 'NOW')), progress = 100 WHERE id = ?", (task_id_2,))
 
 
 connect.close()
