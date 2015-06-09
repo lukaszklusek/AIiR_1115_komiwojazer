@@ -210,3 +210,11 @@ p.copyright {
     margin-right: auto;
     display: block;
 }
+
+.form-signin input{
+    margin-bottom: 5px;
+}
+
+.form-signin button{
+    margin-top: 20px;
+}
