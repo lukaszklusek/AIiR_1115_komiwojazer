@@ -141,7 +141,7 @@ function updateProgress(){
                       $("#choose1-"+i+"").remove();
                       $("#path-1-"+i+"").html("Najkrótsza droga : "+ best[val] +"");
                       $("#date-1-"+i+"").html("<h3>Zadanie zakończone</h3>Data rozpoczęcia : "+ startTime[val] +"<br> Data zakończenia : "+ endTime[val] +"");
-                      if (drawnedTasks[i] != undefined){
+                      if (drawnedTasks[i] == undefined){
                         canvasDone(false);
                           drawnedTasks[i] = true;
                       }
